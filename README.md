@@ -3,116 +3,66 @@
 
 ---
 
-## 1. Team Information
-- **Course**: Introduction to Machine Learning (머신러닝입문)
-- **Team Name**: Cas13 Protein Activity
-- **Member**: 김태현
+## 1. 팀 정보
+- **팀 번호**: 개인 프로젝트
+- **팀명**: Cas13 Protein Activity
+- **팀원**:
+  - 김태현 (EDA, 전처리, AutoML, 평가, XAI, 보고서)
 
 ---
 
-## 2. Project Overview
-This project aims to build a binary classification model to predict passenger survival
-on the Titanic dataset, while demonstrating a complete machine learning pipeline
-including **EDA, preprocessing, AutoML-based modeling, evaluation, and XAI**.
+## 2. 프로젝트 개요
 
-Although the team’s primary research interest is **Cas13 protein activity prediction
-based on sequence variants**, the Titanic dataset was used for AutoML and XAI practice,
-as allowed by the course.  
-The overall analysis pipeline developed in this project can be directly extended to
-biological sequence-based prediction tasks such as Cas13 activity modeling.
+- **한 줄 설명**:  
+  Titanic 승객 데이터를 활용하여 생존 여부를 예측하는 이진 분류 모델을 구축하고,  
+  EDA부터 AutoML, 성능 평가, XAI까지 머신러닝 분석 전 과정을 실습하는 프로젝트입니다.
+
+- **키워드**:  
+  #Titanic #BinaryClassification #AutoML #H2O #AutoGluon #XAI #SHAP
 
 ---
 
-## 3. Dataset
-- **Dataset**: Titanic (Kaggle train/test)
-- **Target Variable**: `Survived` (binary classification)
-- **Train Shape**: (892, 12)
-- **Test Shape**: (418, 11)
+## 3. 데이터 소개
 
-### Main Features
-- `Pclass`: Passenger class (1–3)
-- `Sex`: Gender
-- `Age`: Age
-- `SibSp`, `Parch`: Number of family members aboard
-- `Fare`: Ticket fare
-- `Embarked`: Port of embarkation
+- **출처**:  
+  - Kaggle Titanic Dataset (train / test)
 
----
+- **주요 컬럼**:  
+  - `Pclass`, `Sex`, `Age`, `SibSp`, `Parch`, `Fare`, `Embarked`, `Survived`
 
-## 4. Analysis Pipeline
+- **기간**:  
+  - 1912년 Titanic 탑승객 데이터
 
-### 4.1 Exploratory Data Analysis (EDA)
-- Automated EDA was performed using **ydata-profiling**.
-- Data distribution, missing values, and feature characteristics were explored.
-- Both **train-only EDA** and **train vs test comparison EDA** were generated.
-
-**Outputs**
-- `reports/eda/titanic_train_eda.html`
-- `reports/eda/titanic_train_test_eda.html`
+- **전처리 개요**:  
+  - 불필요 컬럼 제거 (`PassengerId`, `Name`, `Ticket`, `Cabin`)  
+  - 결측치 처리 (`Age`: median, `Embarked`: mode)  
+  - 범주형 변수 인코딩 (`Sex`, `Embarked`)  
+  - train/test feature 정합성 유지
 
 ---
 
-### 4.2 Preprocessing & Feature Engineering
-- Removed non-informative or high-cardinality columns  
-  (`PassengerId`, `Name`, `Ticket`, `Cabin`)
-- Missing values handled using training-data statistics:
-  - `Age`: median
-  - `Embarked`: mode
-- Categorical encoding:
-  - `Sex`: binary encoding
-  - `Embarked`: one-hot encoding
-- Ensured feature alignment between train and test datasets.
+## 4. 분석/모델링 목표
 
-**Outputs**
-- `data/interim/titanic_cleaned.csv`
-- `data/processed/titanic_features.csv`
+- **분석 질문**:
+  1. 승객의 어떤 특성이 생존 여부에 가장 큰 영향을 미치는가?
+  2. AutoML 모델은 기본 머신러닝 모델 대비 어떤 성능을 보이는가?
 
----
-
-### 4.3 Modeling (AutoML & Baseline)
-The following models were applied:
-
-- **H2O AutoML**
-  - Configuration: `max_models=10`, `balance_classes=True`
-  - Validation metric: ROC-AUC
-- **AutoGluon TabularPredictor**
-  - Preset: `medium_quality`
-  - Best model: `WeightedEnsemble_L2`
-- **Baseline Model**
-  - RandomForestClassifier (`n_estimators=300`)
-
-AutoML results were compared using validation ROC-AUC scores.
+- **사용 방법**:
+  - **EDA**: ydata-profiling 기반 자동 EDA
+  - **모델링**:
+    - H2O AutoML
+    - AutoGluon TabularPredictor
+    - RandomForest (baseline)
+  - **평가**:
+    - Threshold 기반 Confusion Matrix
+    - ROC / PR Curve
+  - **XAI**:
+    - SHAP global feature importance
+    - SHAP local explanation
 
 ---
 
-### 4.4 Evaluation
-Model performance was evaluated on the validation set using:
-- Threshold-based Confusion Matrix (thresholds 0.1–0.9)
-- Accuracy vs Threshold curve
-- ROC Curve & ROC-AUC
-- Precision-Recall Curve & PR-AUC
-
-**Key Result**
-- RandomForest ROC-AUC: **0.837**
-
----
-
-### 4.5 Explainable AI (XAI)
-- SHAP was applied to the RandomForest model for interpretability.
-- **Global explanation**: SHAP summary bar plot
-- **Local explanation**: Individual prediction explanations for selected samples
-
-Key influential features:
-- `Sex`
-- `Fare`
-- `Age`
-- `Pclass`
-
-These results are consistent with known historical factors affecting Titanic survival.
-
----
-
-## 5. Repository Structure
+## 5. 폴더 구조
 
 ```text
 project-root/
@@ -147,29 +97,30 @@ project-root/
 │  └─ final_report.md
 └─ src/
    └─ preprocessing.py
-```
----
 
-## 6. Main Results Summary
+## 6. 주요 결과 요약
 - **Best AutoML Model**: AutoGluon `WeightedEnsemble_L2`
-- **Baseline ROC-AUC**: 0.837
-- **Most important features**: Sex, Fare, Age, Pclass
-- Successfully demonstrated an end-to-end ML workflow with AutoML and XAI.
+- **Baseline ROC-AUC (RandomForest)**: 0.837
+- **중요 변수**: Sex, Fare, Age, Pclass
+- SHAP 분석을 통해 모델 예측 근거를 정량적으로 해석함.
 
 ---
 
-## 7. Notes
+##  7. Limitations & Future Work
+- Titanic 데이터는 제한된 변수만 포함함.
+- TPOT은 라이브러리 버전 이슈로 제한적 사용.
+- 향후 과제로 Cas13 단백질 서열 데이터에 대해:
+  - Cas13 sequence variants
+  - k-mer / embedding 기반 feature 구축
+  - AutoML 적용
+  - Biological activity prediction and interpretation
+  - SHAP을 통한 활성 결정 부위 해석으로 확장 가능
+
+---
+
+##  8. Notes
 - All notebooks were executed and validated in **Google Colab**.
 - Environment-specific commands (e.g., `pip install`) are included for reproducibility.
 - The analysis pipeline can be extended to **Cas13 protein activity prediction**
   by replacing tabular features with sequence-based encodings.
 
----
-
-## 8. Limitations & Future Work
-- Titanic dataset contains limited contextual variables.
-- TPOT AutoML was only partially explored due to library version constraints.
-- Future work includes applying the same pipeline to:
-  - Cas13 sequence variants
-  - k-mer or embedding-based features
-  - Biological activity prediction and interpretation
