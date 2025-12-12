@@ -113,6 +113,8 @@ These results are consistent with known historical factors affecting Titanic sur
 ---
 
 ## 5. Repository Structure
+
+```text
 project-root/
 ├─ README.md
 ├─ data/
@@ -132,7 +134,7 @@ project-root/
 ├─ reports/
 │  ├─ eda/
 │  │   ├─ titanic_train_eda.html
-│  │   ├─ titanic_train_test_eda.html
+│  │   └─ titanic_train_test_eda.html
 │  ├─ figures/
 │  │   ├─ cas13_example_diagram.png
 │  │   ├─ figure1.png
@@ -144,7 +146,7 @@ project-root/
 │  │   └─ figure7.png
 │  └─ final_report.md
 └─ src/
-│  └─ preprocessing.py
+   └─ preprocessing.py
 
 ---
 
