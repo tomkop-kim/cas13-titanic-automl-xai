@@ -147,7 +147,7 @@ project-root/
 │  └─ final_report.md
 └─ src/
    └─ preprocessing.py
-
+```
 ---
 
 ## 6. Main Results Summary
